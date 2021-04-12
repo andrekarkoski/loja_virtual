@@ -4,15 +4,13 @@ import 'package:loja_virtual/models/item_size.dart';
 
 class Product extends ChangeNotifier {
 
-  Product.fromDocument(DocumentSnapshot document) {
+  Product.fromDocument(DocumentSnapshot document){
     id = document.documentID;
     name = document['name'] as String;
     description = document['description'] as String;
-    images = List<String>.from(document.data['images'] as List<dynamic> );
+    images = List<String>.from(document.data['images'] as List<dynamic>);
     sizes = (document.data['sizes'] as List<dynamic> ?? []).map(
             (s) => ItemSize.fromMap(s as Map<String, dynamic>)).toList();
-
-    print(sizes);
   }
 
   String id;
@@ -23,15 +21,14 @@ class Product extends ChangeNotifier {
 
   ItemSize _selectedSize;
   ItemSize get selectedSize => _selectedSize;
-
-  set selectedSize(ItemSize value) {
+  set selectedSize(ItemSize value){
     _selectedSize = value;
     notifyListeners();
   }
 
   int get totalStock {
     int stock = 0;
-    for (final size in sizes){
+    for(final size in sizes){
       stock += size.stock;
     }
     return stock;
@@ -41,6 +38,15 @@ class Product extends ChangeNotifier {
     return totalStock > 0;
   }
 
+  num get basePrice {
+    num lowest = double.infinity;
+    for(final size in sizes){
+      if(size.price < lowest && size.hasStock)
+        lowest = size.price;
+    }
+    return lowest;
+  }
+
   ItemSize findSize(String name){
     try {
       return sizes.firstWhere((s) => s.name == name);
@@ -48,6 +54,5 @@ class Product extends ChangeNotifier {
       return null;
     }
   }
-
 
 }
