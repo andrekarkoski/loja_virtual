@@ -10,6 +10,7 @@ import 'package:loja_virtual/screens/cart/cart_screen.dart';
 import 'package:loja_virtual/screens/edit_product/edit_product_screen.dart';
 import 'package:loja_virtual/screens/login/login_screen.dart';
 import 'package:loja_virtual/screens/product/product_screen.dart';
+import 'package:loja_virtual/screens/select_product/select_product_screen.dart';
 import 'package:loja_virtual/screens/signup/signup_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -38,7 +39,7 @@ class MyApp extends StatelessWidget {
           create: (_) => CartManager(),
           lazy: false,
           update: (_, userManager, cartManager) =>
-            cartManager..updateUser(userManager),
+          cartManager..updateUser(userManager),
         ),
         ChangeNotifierProxyProvider<UserManager, AdminUsersManager>(
           create: (_) => AdminUsersManager(),
@@ -48,7 +49,7 @@ class MyApp extends StatelessWidget {
         )
       ],
       child: MaterialApp(
-        title: 'Varejão das Fabricas',
+        title: 'Varejão das Fábricas',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primaryColor: const Color.fromARGB(255, 4, 125, 141),
@@ -72,7 +73,7 @@ class MyApp extends StatelessWidget {
             case '/product':
               return MaterialPageRoute(
                   builder: (_) => ProductScreen(
-                    settings.arguments as Product
+                      settings.arguments as Product
                   )
               );
             case '/cart':
@@ -82,8 +83,12 @@ class MyApp extends StatelessWidget {
             case '/edit_product':
               return MaterialPageRoute(
                   builder: (_) => EditProductScreen(
-                    settings.arguments as Product
+                      settings.arguments as Product
                   )
+              );
+            case '/select_product':
+              return MaterialPageRoute(
+                  builder: (_) => SelectProductScreen()
               );
             case '/base':
             default:

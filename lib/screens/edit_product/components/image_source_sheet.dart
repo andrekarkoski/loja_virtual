@@ -14,7 +14,7 @@ class ImageSourceSheet extends StatelessWidget {
   final ImagePicker picker = ImagePicker();
 
   Future<void> editImage(String path, BuildContext context) async{
-    final File cropperFile = await ImageCropper.cropImage(
+    final File croppedFile = await ImageCropper.cropImage(
       sourcePath: path,
       aspectRatio: const CropAspectRatio(ratioX: 1.0, ratioY: 1.0),
       androidUiSettings: AndroidUiSettings(
@@ -30,8 +30,8 @@ class ImageSourceSheet extends StatelessWidget {
       )
     );
 
-    if ( cropperFile != null ){
-      onImageSelected(cropperFile);
+    if ( croppedFile != null ){
+      onImageSelected(croppedFile);
     }
   }
   
