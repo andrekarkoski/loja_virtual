@@ -1,16 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:loja_virtual/common/custom_drawer/custom_drawer.dart';
 import 'package:loja_virtual/models/page_manager.dart';
 import 'package:loja_virtual/models/user_manager.dart';
+import 'package:loja_virtual/screens/admin_orders/admin_orders_screen.dart';
 import 'package:loja_virtual/screens/admin_users_screen/admin_users_screen.dart';
 import 'package:loja_virtual/screens/home/home_screen.dart';
-import 'package:loja_virtual/screens/login/login_screen.dart';
+import 'package:loja_virtual/screens/orders/orders_screen.dart';
 import 'package:loja_virtual/screens/products/products_screen.dart';
+import 'package:loja_virtual/screens/stores/stores_screen.dart';
 import 'package:provider/provider.dart';
 
-class BaseScreen extends StatelessWidget {
+class BaseScreen extends StatefulWidget {
+
+  @override
+  _BaseScreenState createState() => _BaseScreenState();
+}
+
+class _BaseScreenState extends State<BaseScreen> {
 
   final PageController pageController = PageController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp
+    ]);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,27 +42,12 @@ class BaseScreen extends StatelessWidget {
             children: <Widget>[
               HomeScreen(),
               ProductsScreen(),
-              Scaffold(
-                drawer: CustomDrawer(),
-                appBar: AppBar(
-                  title: const Text('Home3'),
-                ),
-              ),
-              Scaffold(
-                drawer: CustomDrawer(),
-                appBar: AppBar(
-                  title: const Text('Home4'),
-                ),
-              ),
+              OrdersScreen(),
+              StoresScreen(),
               if(userManager.adminEnabled)
                 ...[
                   AdminUsersScreen(),
-                  Scaffold(
-                    drawer: CustomDrawer(),
-                    appBar: AppBar(
-                      title: const Text('Pedidos'),
-                    ),
-                  ),
+                  AdminOrdersScreen(),
                 ]
             ],
           );

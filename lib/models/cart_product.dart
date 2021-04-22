@@ -6,7 +6,7 @@ import 'item_size.dart';
 
 class CartProduct extends ChangeNotifier {
 
-  CartProduct.fromProduct(this.product){
+  CartProduct.fromProduct(this._product){
     productId = product.id;
     quantity = 1;
     size = product.selectedSize.name;
@@ -19,21 +19,41 @@ class CartProduct extends ChangeNotifier {
     size = document.data['size'] as String;
 
     firestore.document('products/$productId').get().then(
-      (doc) {
-        product = Product.fromDocument(doc);
-        notifyListeners();
-      }
+            (doc) {
+          product = Product.fromDocument(doc);
+        }
+    );
+  }
+
+  CartProduct.fromMap(Map<String, dynamic> map){
+    productId = map['pid'] as String;
+    quantity = map['quantity'] as int;
+    size = map['size'] as String;
+    fixedPrice = map['fixedPrice'] as num;
+
+    firestore.document('products/$productId').get().then(
+            (doc) {
+          product = Product.fromDocument(doc);
+        }
     );
   }
 
   final Firestore firestore = Firestore.instance;
 
   String id;
+
   String productId;
   int quantity;
   String size;
 
-  Product product;
+  num fixedPrice;
+
+  Product _product;
+  Product get product => _product;
+  set product(Product value){
+    _product = value;
+    notifyListeners();
+  }
 
   ItemSize get itemSize {
     if(product == null) return null;
@@ -55,24 +75,34 @@ class CartProduct extends ChangeNotifier {
     };
   }
 
+  Map<String, dynamic> toOrderItemMap(){
+    return {
+      'pid': productId,
+      'quantity': quantity,
+      'size': size,
+      'fixedPrice': fixedPrice ?? unitPrice,
+    };
+  }
+
   bool stackable(Product product){
     return product.id == productId && product.selectedSize.name == size;
   }
 
-  void increment() {
+  void increment(){
     quantity++;
     notifyListeners();
   }
 
-  void decrement() {
+  void decrement(){
     quantity--;
     notifyListeners();
   }
 
   bool get hasStock {
+    if(product != null && product.deleted) return false;
+
     final size = itemSize;
-    if ( size == null )
-      return false;
+    if(size == null) return false;
     return size.stock >= quantity;
   }
 

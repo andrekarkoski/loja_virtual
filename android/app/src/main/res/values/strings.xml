@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name='app_name'>Varejão das Fábricas</string>
+
+    <string name="facebook_app_id">288087979337448</string>
+
+    <string name="fb_login_protocol_scheme">fb288087979337448</string>
+
+</resources>

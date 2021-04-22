@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'components/images_form.dart';
 import 'components/sizes_form.dart';
 
+
 class EditProductScreen extends StatelessWidget {
 
   EditProductScreen(Product p) :
@@ -27,6 +28,16 @@ class EditProductScreen extends StatelessWidget {
         appBar: AppBar(
           title: Text(editing ? 'Editar Produto' : 'Criar Produto'),
           centerTitle: true,
+          actions: <Widget>[
+            if(editing)
+              IconButton(
+                icon: Icon(Icons.delete),
+                onPressed: (){
+                  context.read<ProductManager>().delete(product);
+                  Navigator.of(context).pop();
+                },
+              )
+          ],
         ),
         backgroundColor: Colors.white,
         body: Form(
@@ -122,8 +133,8 @@ class EditProductScreen extends StatelessWidget {
                             color: primaryColor,
                             disabledColor: primaryColor.withAlpha(100),
                             child: product.loading
-                              ? CircularProgressIndicator(
-                                valueColor: AlwaysStoppedAnimation(Colors.white),
+                                ? CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation(Colors.white),
                             )
                                 : const Text(
                               'Salvar',
